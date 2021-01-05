@@ -4,6 +4,7 @@ const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const routerAutentikasi = require('./router/routerAutentikasi');
+const routerKelolamateri = require('./router/routerKelolamateri');
 
 //implementasi dotenv
 dotenv.config();
@@ -27,6 +28,8 @@ app.get(baseurl, (req, res) => {
 });
 
 app.use(baseurl + '/autentikasi', routerAutentikasi);
+
+app.use(baseurl + '/kelolamateri', routerKelolamateri);
 
 //menjalankan server
 const port = 3000;

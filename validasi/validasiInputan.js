@@ -21,6 +21,16 @@ const validasiMasuk = (data) => {
     return schemaMasuk.validate(data);
 }
 
+const validasiInputfile = (data) => {
+    const schemaInputfile = Joi.object({
+        namamateri: Joi.string().required(),
+        kategorimateri: Joi.string().required()
+    });
+
+    return schemaInputfile.validate(data);
+}
+
 //export module
 module.exports.validasiDaftar = validasiDaftar;
 module.exports.validasiMasuk = validasiMasuk;
+module.exports.validasiInputfile = validasiInputfile;
