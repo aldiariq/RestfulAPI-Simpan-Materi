@@ -1,0 +1,11 @@
+{
+  "name": "apisimpanmateri",
+  "version": "1.0.0",
+  "description": "RestfulAPI berbasis NodeJS untuk Aplikasi Simpan Tugas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "aldiariq",
+  "license": "ISC"
+}
