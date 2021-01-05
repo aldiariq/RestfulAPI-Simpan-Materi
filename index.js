@@ -17,9 +17,6 @@ mongoose.connect(
     }
 );
 
-//implementasi json consume
-app.use(express.json());
-
 //implementasi router
 const baseurl = '/api';
 app.get(baseurl, (req, res) => {

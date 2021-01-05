@@ -4,9 +4,11 @@ const {validasiDaftar, validasiMasuk} = require('../validasi/validasiInputan');
 const modelPengguna = require('../model/modelPengguna');
 const bcryptjs = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
+const multer = require('multer');
+const upload = multer();
 
 //implementasi router
-router.post('/daftar', async (req, res) => {
+router.post('/daftar', upload.none(), async (req, res) => {
     //tampung error inputan
     const {error} = validasiDaftar(req.body);
 
@@ -63,14 +65,11 @@ router.post('/daftar', async (req, res) => {
                     'pesan': 'Gagal Mendaftarkan Pengguna'
                 });
             }
-
-            
-            
         }
     }
 });
 
-router.post('/masuk', async (req, res) => {
+router.post('/masuk', upload.none(), async (req, res) => {
     //tampung error inputan
     const {error} = validasiMasuk(req.body);
 
@@ -122,7 +121,6 @@ router.post('/masuk', async (req, res) => {
                 'pesan': 'Pastikan Email Sudah Terdaftar'
             });
         }
-
     }
 });
 
