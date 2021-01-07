@@ -127,6 +127,73 @@ router.get('/materi/:_id', validasiToken, async (req, res) => {
 
 });
 
+router.patch('/materi/:_id', validasiToken, uploadfile.any(), async (req, res) => {
+    //tampung error inputan
+    const { error } = validasiInputfile(req.body);
+
+    if (error) {
+        return res.status(400).send({
+            'status': false,
+            'pesan': 'Pastikan Inputan Memenuhi Syarat'
+        });
+    } else {
+        //tampung data pengguna
+        const datapengguna = await modelPengguna({
+            _id: req.pengguna._id,
+            email: req.pengguna.email
+        });
+
+        //pengecekan data pengguna
+        if (datapengguna) {
+            let ubahmateri = null;
+            //pengecekan request file
+            if (req.files[0]) {
+                ubahmateri = await modelMateri.updateOne(
+                    {
+                        _id: req.params._id,
+                        idpengguna: req.pengguna._id,
+                        namafilemateri: req.files[0].originalname
+                    },
+                    {
+                        namamateri: req.body.namamateri,
+                        kategorimateri: req.body.kategorimateri
+                    }
+                );
+            } else {
+                //tampung data ubah materi
+                ubahmateri = await modelMateri.updateOne(
+                    {
+                        _id: req.params._id,
+                        idpengguna: req.pengguna._id
+                    },
+                    {
+                        namamateri: req.body.namamateri,
+                        kategorimateri: req.body.kategorimateri
+                    }
+                );
+            }
+            //pengecekan ubah materi
+            if (ubahmateri) {
+                uploadfile.single("filemateri");
+                return res.status(200).send({
+                    'status': true,
+                    'pesan': 'Berhasil Mengubah Data Materi'
+                });
+            } else {
+                return res.status(400).send({
+                    'status': false,
+                    'pesan': 'Gagal Mengubah Data Materi'
+                });
+            }
+        } else {
+            return res.status(400).send({
+                'status': false,
+                'pesan': 'Pengguna Tidak Terdaftar'
+            });
+        }
+    }
+});
+
 router.delete('/materi/:_id', validasiToken, async (req, res) => {
     //tampung data pengguna
     const datapengguna = await modelPengguna.find({
