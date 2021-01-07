@@ -15,6 +15,7 @@ const konfigurasipenyimpanan = multer.diskStorage({
 const uploadfile = multer({ storage: konfigurasipenyimpanan })
 
 const modelMateri = require('../model/modelMateri');
+const modelPengguna = require('../model/modelPengguna');
 
 //implementasi router
 router.post('/materi', validasiToken, uploadfile.any(), async (req, res) => {
@@ -61,6 +62,69 @@ router.post('/materi', validasiToken, uploadfile.any(), async (req, res) => {
         }
     }
 });
+
+router.get('/materi', validasiToken, async (req, res) => {
+    //tampung data pengguna
+    const datapengguna = await modelPengguna.find({
+        _id: req.pengguna._id,
+        email: req.pengguna.email
+    });
+
+    //pengecekan pengguna
+    if (datapengguna) {
+        //tampung data materi
+        const datamateri = await modelMateri.find({
+            idpengguna: req.pengguna._id
+        });
+
+        return res.status(200).send({
+            'status': true,
+            'pesan': 'Berhasil Mendapatkan Materi',
+            'materi': datamateri
+        });
+    } else {
+        return res.status(400).send({
+            'status': false,
+            'pesan': 'Pengguna Tidak Terdaftar'
+        });
+    }
+
+    const datamateri = await modelMateri.find({
+        idpengguna: idpengguna
+    });
+
+
+});
+
+router.get('/materi/:_id', validasiToken, async (req, res) => {
+    //tampung data pengguna
+    const datapengguna = await modelPengguna.find({
+        _id: req.pengguna._id,
+        email: req.pengguna.email
+    });
+
+    //pengecekan data pengguna
+    if (datapengguna) {
+        //tampung data materi
+        const datamateri = await modelMateri.findOne({
+            _id: req.params._id,
+            idpengguna: req.pengguna._id
+        });
+
+        return res.status(200).send({
+            'status': true,
+            'pesan': 'Berhasil Mendapatkan Data Materi',
+            'materi': datamateri
+        });
+    } else {
+        return res.status(400).send({
+            'status': false,
+            'pesan': 'Pengguna Tidak Terdaftar'
+        });
+    }
+
+});
+
 
 //export module
 module.exports = router;
